@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        AI Resume Analyzer
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header class="top-header">
+
+    <div class="header-container">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h1>
+                    AI Resume Analyzer
+                </h1>
+
+                <p>
+                    AI-Powered Resume Analysis & Job Matching
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-status">
+
+            <span class="status-dot"></span>
+
+            Analysis System Ready
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main class="container">
+
+
+<!-- =====================================================
+     STATUS MESSAGE
+====================================================== -->
+
+{% if error %}
+
+<div class="info-box">
+
+    <span class="info-icon">
+        ℹ️
+    </span>
+
+    <div>
+
+        <strong>
+            Analysis Status
+        </strong>
+
+        <p>
+            {{ error }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =====================================================
+     UPLOAD SECTION
+====================================================== -->
+
+<section class="hero-section">
+
+    <div class="hero-content">
+
+        <span class="hero-badge">
+            🚀 AI Resume Intelligence
+        </span>
+
+        <h2>
+            Analyze Your Resume
+        </h2>
+
+        <p>
+            Upload your resume and compare it with a job description
+            to get detailed ATS and job matching insights.
+        </p>
+
+    </div>
+
+
+    <div class="upload-box">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+
+            <!-- Resume -->
+
+            <div class="form-group">
+
+                <label>
+                    📄 Upload Resume PDF
+                </label>
+
+                <input
+                    type="file"
+                    name="resume"
+                    accept=".pdf"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Job Description -->
+
+            <div class="form-group">
+
+                <label>
+                    🎯 Job Description
+                </label>
+
+                <textarea
+                    name="job_description"
+                    rows="9"
+                    placeholder="Paste the complete job description here..."
+                    required
+                >{{ job_description }}</textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="analyze-button"
+            >
+
+                🚀 Analyze Resume
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EXTRACTED RESUME TEXT
+====================================================== -->
+
+{% if resume_text %}
+
+<section class="extracted-section">
+
+    <div class="section-title">
+
+        <span>
+            📄
+        </span>
+
+        <div>
+
+            <h2>
+                Extracted Resume Text
+            </h2>
+
+            <p>
+                Text successfully extracted from your PDF
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <textarea
+        class="extracted-text"
+        rows="12"
+        readonly
+    >{{ resume_text }}</textarea>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- =====================================================
+     ANALYSIS DASHBOARD
+====================================================== -->
+
+{% if analysis_data %}
+
+<section class="dashboard">
+
+
+    <!-- =================================================
+         DASHBOARD HEADER
+    ================================================== -->
+
+    <div class="dashboard-header">
+
+        <div class="dashboard-title">
+
+            <div class="dashboard-title-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h2>
+                    Resume & Job Analysis
+                </h2>
+
+                <p>
+                    Complete analysis of your resume and job description
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="analysis-completed">
+
+            <span>
+                ✓
+            </span>
+
+            <div>
+
+                <strong>
+                    Analysis Completed
+                </strong>
+
+                <small>
+                    Dashboard generated successfully
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SCORE CARDS
+    ================================================== -->
+
+    <div class="score-grid">
+
+
+        <!-- Resume Score -->
+
+        <div class="score-card">
+
+            <div
+                class="circle resume-circle"
+                style="--score: {{ analysis_data.resume_score }}%;"
+            >
+
+                <div class="circle-inner">
+
+                    <strong>
+                        {{ analysis_data.resume_score }}
+                    </strong>
+
+                    <span>
+                        /100
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="score-info">
+
+                <span class="card-label">
+                    📄 Resume Score
+                </span>
+
+                <h3>
+                    ATS Score
+                </h3>
+
+
+                {% if analysis_data.resume_score >= 80 %}
+
+                    <span class="badge good">
+                        Good
+                    </span>
+
+                {% elif analysis_data.resume_score >= 60 %}
+
+                    <span class="badge average">
+                        Average
+                    </span>
+
+                {% else %}
+
+                    <span class="badge poor">
+                        Needs Improvement
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Job Match -->
+
+        <div class="score-card">
+
+            <div
+                class="circle job-circle"
+                style="--score: {{ analysis_data.job_match }}%;"
+            >
+
+                <div class="circle-inner">
+
+                    <strong>
+                        {{ analysis_data.job_match }}%
+                    </strong>
+
+                    <span>
+                        Match
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="score-info">
+
+                <span class="card-label">
+                    🎯 Job Match
+                </span>
+
+                <h3>
+                    Match Percentage
+                </h3>
+
+
+                {% if analysis_data.job_match >= 70 %}
+
+                    <span class="badge good">
+                        Strong Match
+                    </span>
+
+                {% elif analysis_data.job_match >= 40 %}
+
+                    <span class="badge average">
+                        Moderate Match
+                    </span>
+
+                {% else %}
+
+                    <span class="badge poor">
+                        Low Match
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Total Skills -->
+
+        <div class="metric-card blue">
+
+            <div class="metric-icon">
+                🧠
+            </div>
+
+            <h3>
+                Total Skills
+            </h3>
+
+            <strong>
+                {{ analysis_data.sections.get("KEY SKILLS", [])|length }}
+            </strong>
+
+            <p>
+                detected in resume
+            </p>
+
+        </div>
+
+
+
+        <!-- Matching Skills -->
+
+        <div class="metric-card green">
+
+            <div class="metric-icon">
+                ✓
+            </div>
+
+            <h3>
+                Matching Skills
+            </h3>
+
+            <strong>
+                {{ analysis_data.sections.get("MATCHING SKILLS", [])|length }}
+            </strong>
+
+            <p>
+                with job description
+            </p>
+
+        </div>
+
+
+
+        <!-- Missing Skills -->
+
+        <div class="metric-card red">
+
+            <div class="metric-icon">
+                !
+            </div>
+
+            <h3>
+                Missing Skills
+            </h3>
+
+            <strong>
+                {{ analysis_data.sections.get("JOB MISSING SKILLS", [])|length }}
+            </strong>
+
+            <p>
+                required by job
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TWO COLUMN DASHBOARD
+    ================================================== -->
+
+    <div class="dashboard-columns">
+
+
+
+        <!-- =================================================
+             LEFT - RESUME ANALYSIS
+        ================================================== -->
+
+        <div class="dashboard-panel">
+
+
+            <div class="panel-header resume-header">
+
+                <span>
+                    📄
+                </span>
+
+                Resume Analysis
+
+                <span class="panel-score">
+                    {{ analysis_data.resume_score }}/100
+                </span>
+
+            </div>
+
+
+
+            <!-- Candidate Summary -->
+
+            <div class="dashboard-card summary-card">
+
+                <h3>
+                    👤 Candidate Summary
+                </h3>
+
+                {% for item in analysis_data.sections.get("CANDIDATE SUMMARY", []) %}
+
+                    <p>
+                        {{ item }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- Key Skills -->
+
+            <div class="dashboard-card">
+
+                <h3>
+                    💡 Key Skills
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("KEY SKILLS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Technical Skills -->
+
+            <div class="dashboard-card technical-card">
+
+                <h3>
+                    💻 Technical Skills
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("TECHNICAL SKILLS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge technical">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Soft Skills -->
+
+            <div class="dashboard-card orange-card">
+
+                <h3>
+                    🤝 Soft Skills
+                </h3>
+
+                <ul>
+
+                    {% for item in analysis_data.sections.get("SOFT SKILLS", []) %}
+
+                        <li>
+                            {{ item|replace("-", "")|trim }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- Education / Projects / Experience -->
+
+            <div class="mini-grid">
+
+
+                <div class="mini-card education">
+
+                    <div class="mini-icon">
+                        🎓
+                    </div>
+
+                    <h3>
+                        Education
+                    </h3>
+
+                    {% for item in analysis_data.sections.get("EDUCATION", []) %}
+
+                        <p>
+                            {{ item }}
+                        </p>
+
+                    {% endfor %}
+
+                </div>
+
+
+
+                <div class="mini-card projects">
+
+                    <div class="mini-icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Projects
+                    </h3>
+
+                    {% for item in analysis_data.sections.get("PROJECTS", []) %}
+
+                        <p>
+                            {{ item }}
+                        </p>
+
+                    {% endfor %}
+
+                </div>
+
+
+
+                <div class="mini-card experience">
+
+                    <div class="mini-icon">
+                        💼
+                    </div>
+
+                    <h3>
+                        Experience
+                    </h3>
+
+                    {% for item in analysis_data.sections.get("EXPERIENCE", []) %}
+
+                        <p>
+                            {{ item }}
+                        </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Strengths + Weaknesses -->
+
+            <div class="two-column">
+
+
+                <div class="dashboard-card strengths">
+
+                    <h3>
+                        ✅ Strengths
+                    </h3>
+
+                    <ul>
+
+                        {% for item in analysis_data.sections.get("STRENGTHS", []) %}
+
+                            <li>
+                                {{ item|replace("-", "")|trim }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+
+                <div class="dashboard-card weaknesses">
+
+                    <h3>
+                        ⚠️ Weaknesses
+                    </h3>
+
+                    <ul>
+
+                        {% for item in analysis_data.sections.get("WEAKNESSES", []) %}
+
+                            <li>
+                                {{ item|replace("-", "")|trim }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Missing Skills -->
+
+            <div class="dashboard-card missing">
+
+                <h3>
+                    ❌ Missing Skills / Improvements
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("MISSING SKILLS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge missing-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ATS Suggestions -->
+
+            <div class="dashboard-card ats">
+
+                <h3>
+                    📌 ATS Suggestions
+                </h3>
+
+                <ul>
+
+                    {% for item in analysis_data.sections.get("ATS SUGGESTIONS", []) %}
+
+                        <li>
+                            {{ item|replace("-", "")|trim }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- Suitable Job Roles -->
+
+            <div class="dashboard-card roles">
+
+                <h3>
+                    🎯 Suitable Job Roles
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("SUITABLE JOB ROLES", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="role-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT - JOB MATCH ANALYSIS
+        ================================================== -->
+
+        <div class="dashboard-panel">
+
+
+            <div class="panel-header job-header">
+
+                <span>
+                    🎯
+                </span>
+
+                Job Match Analysis
+
+                <span class="panel-score">
+                    {{ analysis_data.job_match }}%
+                </span>
+
+            </div>
+
+
+
+            <!-- Large Job Score -->
+
+            <div class="job-score-large">
+
+
+                <div
+                    class="circle job-large"
+                    style="--score: {{ analysis_data.job_match }}%;"
+                >
+
+                    <div class="circle-inner">
+
+                        <strong>
+                            {{ analysis_data.job_match }}%
+                        </strong>
+
+                        <span>
+                            Match
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Job Match Percentage
+                    </h3>
+
+
+                    {% if analysis_data.job_match >= 70 %}
+
+                        <span class="badge good">
+                            Strong Match
+                        </span>
+
+                    {% elif analysis_data.job_match >= 40 %}
+
+                        <span class="badge average">
+                            Moderate Match
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge poor">
+                            Low Match
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Matching Skills -->
+
+            <div class="dashboard-card matching">
+
+                <h3>
+                    ✅ Matching Skills
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("MATCHING SKILLS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge match-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Job Missing Skills -->
+
+            <div class="dashboard-card missing">
+
+                <h3>
+                    🚨 Job Missing Skills
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("JOB MISSING SKILLS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge missing-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Qualifications -->
+
+            <div class="dashboard-card qualification">
+
+                <h3>
+                    🎓 Matching Qualifications
+                </h3>
+
+                <ul>
+
+                    {% for item in analysis_data.sections.get("MATCHING QUALIFICATIONS", []) %}
+
+                        <li>
+                            {{ item|replace("-", "")|trim }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- Experience Match -->
+
+            <div class="dashboard-card experience-match">
+
+                <h3>
+                    💼 Experience Match
+                </h3>
+
+                {% for item in analysis_data.sections.get("EXPERIENCE MATCH", []) %}
+
+                    <p>
+                        {{ item }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- Technical Match -->
+
+            <div class="dashboard-card matching">
+
+                <h3>
+                    💻 Technical Match
+                </h3>
+
+                {% for item in analysis_data.sections.get("TECHNICAL MATCH", []) %}
+
+                    <p>
+                        {{ item|replace("-", "")|trim }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- Missing ATS Keywords -->
+
+            <div class="dashboard-card missing">
+
+                <h3>
+                    🔑 Missing ATS Keywords
+                </h3>
+
+                <div class="skill-list">
+
+                    {% for item in analysis_data.sections.get("MISSING ATS KEYWORDS", []) %}
+
+                        {% if item.startswith("-") %}
+
+                            <span class="skill-badge missing-badge">
+
+                                {{ item[1:].strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Job Specific Suggestions -->
+
+            <div class="dashboard-card suggestions">
+
+                <h3>
+                    💡 Job-Specific Suggestions
+                </h3>
+
+                <ul>
+
+                    {% for item in analysis_data.sections.get("JOB-SPECIFIC SUGGESTIONS", []) %}
+
+                        <li>
+                            {{ item|replace("-", "")|trim }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- Final Summary -->
+
+            <div class="dashboard-card final-summary">
+
+                <h3>
+                    📋 Final Summary
+                </h3>
+
+                {% for item in analysis_data.sections.get("FINAL SUMMARY", []) %}
+
+                    <p>
+                        {{ item }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- Analysis Mode -->
+
+            <div class="analysis-mode">
+
+                <strong>
+                    🤖 Analysis Mode
+                </strong>
+
+                {% for item in analysis_data.sections.get("ANALYSIS MODE", []) %}
+
+                    <p>
+                        {{ item }}
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <h3>
+            🤖 AI Resume Analyzer
+        </h3>
+
+        <p>
+            Intelligent Resume Analysis & Job Matching System
+        </p>
+
+        <span>
+            © 2026 AI Resume Analyzer
+        </span>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>
