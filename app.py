@@ -1506,57 +1506,26 @@ def health():
 # =========================================================
 # RUN APPLICATION
 # =========================================================
-
+ 
 if __name__ == "__main__":
 
     print("=" * 60)
-
-    print(
-        "AI RESUME ANALYZER"
-    )
-
+    print("AI RESUME ANALYZER")
     print("=" * 60)
-
 
     if GEMINI_API_KEY:
-
-        print(
-            "Gemini API: CONFIGURED"
-        )
-
-        print(
-            "AI mode: AVAILABLE"
-        )
-
+        print("Gemini API: CONFIGURED")
+        print("AI mode: AVAILABLE")
     else:
+        print("Gemini API: NOT CONFIGURED")
+        print("AI mode: LOCAL FALLBACK")
 
-        print(
-            "Gemini API: NOT CONFIGURED"
-        )
-
-        print(
-            "AI mode: LOCAL FALLBACK"
-        )
-
-
-    print(
-        "Primary Model:",
-        GEMINI_MODEL
-    )
-
-    print(
-        "Fallback Analysis: ENABLED"
-    )
-
+    print("Primary Model:", GEMINI_MODEL)
+    print("Fallback Analysis: ENABLED")
     print("=" * 60)
 
-
     app.run(
-
-        debug=True,
-
-        host="127.0.0.1",
-
-        port=5000
-
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
     )
