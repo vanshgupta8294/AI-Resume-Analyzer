@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="assets/banner.png" alt="AI Resume Analyzer Banner" width="100%">
+</p>
 # 🤖 AI Resume Analyzer
 
 An AI-powered Resume Analyzer built with **Python, Flask, HTML, CSS, and JavaScript** that calculates ATS Resume Score, matches resumes with job descriptions, and provides skill-based recommendations through a professional dashboard.
